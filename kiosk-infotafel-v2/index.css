@@ -1,0 +1,1475 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables for design system tokens - strict high-contrast flat Antigravity style */
+:root {
+  --primary-font: 'Inter', sans-serif;
+  --bg-gradient: #ffffff; /* Redefined to flat white background */
+  
+  --glass-bg: #ffffff;
+  --glass-border: #000000;
+  --glass-glow: none;
+  --glass-blur: none;
+  
+  --text-white: #000000; /* Redefined to deep black text */
+  --text-light: #333333;
+  --text-dark: #000000;
+  --text-muted: #666666;
+  
+  --color-blue: #2563eb; /* Royal Digital Blue accent */
+  --color-lightgray: #f3f4f6; /* structural light gray */
+  --color-divider: #e5e7eb; /* divider line gray */
+  
+  --transition-smooth: all 0.25s cubic-bezier(0.25, 1, 0.5, 1);
+  --transition-fast: all 0.15s ease;
+  
+  --kiosk-w: 430px;
+  --kiosk-h: 760px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--primary-font);
+  background-color: #1a1e22; /* simulator bezel backdrop */
+  color: #000000; /* deep black primary text color */
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Control Panel for simulated bezel and simulation settings */
+.control-panel {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-ctrl {
+  background: #000000;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 0px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: var(--transition-fast);
+}
+
+.btn-ctrl:active {
+  background: #2563eb;
+  transform: translateY(1px);
+}
+
+/* Kiosk Bezel Wrapper Simulator - Optimized for large responsive mockup view */
+:root {
+  /* Kiosk container height stretches to fill 86% of viewport height */
+  --kiosk-h: 86vh;
+  /* Kiosk container width calculated so that screen has EXACT 9:16 aspect ratio (116px account for top padding & bottom stand) */
+  --kiosk-w: calc((var(--kiosk-h) - 116px) * 9 / 16 + 32px);
+}
+
+.kiosk-container {
+  position: relative;
+  width: var(--kiosk-w);
+  height: var(--kiosk-h);
+  background: #25282c;
+  border-radius: 32px;
+  padding: 16px 16px 0px 16px; /* Room for screen, leave space at bottom for logo panel */
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 
+              inset 0 4px 10px rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  border: 4px solid #3c4046;
+  overflow: hidden;
+  transition: width 0.6s ease, height 0.6s ease, border-radius 0.6s ease, padding 0.6s ease;
+}
+
+/* Fullscreen mode toggle classes (behaves as screen-only when toggled fullscreen) */
+.kiosk-container.fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* The screen contents */
+.kiosk-screen {
+  position: relative;
+  flex: 1;
+  background: var(--bg-gradient);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+.kiosk-container.fullscreen .kiosk-screen {
+  border-radius: 0;
+}
+
+/* Physical Stand Panel at the bottom of the device simulator */
+.kiosk-bottom-panel {
+  height: 100px;
+  background: #e2e4e8;
+  margin: 16px -16px -16px -16px; /* pull down to outer bezel edge */
+  display: flex;
+  flex-direction: row; /* Row layout to place QR code next to logo */
+  justify-content: space-between; /* Space them out nicely */
+  align-items: center;
+  border-top: 3px solid #b2b6bd;
+  padding: 12px 24px;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.kiosk-container.fullscreen .kiosk-bottom-panel {
+  display: none; /* Hide in fullscreen */
+}
+
+/* Logo and text inside bottom panel */
+/* Logo container and official SVG logo styling */
+.logo-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+  user-select: none;
+}
+
+.thi-logo-svg {
+  height: 42px; /* perfectly sized to match the bottom bezel height */
+  width: auto;
+  object-fit: contain;
+}
+
+/* QR Code module inside the bottom panel bezel - clean, borderless transparent */
+.qr-code-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+  user-select: none;
+}
+
+.qr-code-box:hover {
+  transform: scale(1.04);
+}
+
+.bottom-qr-inner {
+  width: 48px;
+  height: 48px;
+  background: #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 2px; /* slight white margin for scanning reliability */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.bottom-qr-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bottom-qr-text-wrap {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.bottom-qr-subtitle {
+  font-family: var(--primary-font);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #002c5c;
+  white-space: nowrap;
+}
+
+/* Home view layout */
+.screen-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.home-header-wrap {
+  padding: 24px 24px 0 24px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 15;
+}
+
+.screen-view.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(0, 0);
+}
+
+/* Out of view transition positions */
+.screen-view.slide-left {
+  transform: translate(-100px, 0);
+  opacity: 0;
+}
+
+.screen-view.slide-right {
+  transform: translate(100px, 0);
+  opacity: 0;
+}
+
+/* Main title header */
+.main-title {
+  font-size: 22px;
+  font-weight: 800; /* extremely bold */
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  color: #000000; /* deep black */
+  line-height: 1.3;
+  text-shadow: none; /* no shadow */
+}
+
+/* Navigation tab pills */
+.tabs-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+  overflow-x: auto;
+  padding: 4px 2px 12px 2px;
+  scrollbar-width: none; /* Hide standard Firefox scrollbars */
+  z-index: 10;
+  scroll-behavior: smooth;
+  touch-action: pan-x;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  cursor: grab;
+}
+
+.tabs-container:active {
+  cursor: grabbing;
+}
+
+.tabs-container::-webkit-scrollbar {
+  display: none; /* Hide standard Chrome scrollbars */
+}
+
+.tab-pill {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0px; /* square corners */
+  color: #000000;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  backdrop-filter: none;
+}
+
+.tab-pill:active {
+  background: #f3f4f6;
+  transform: scale(0.95);
+}
+
+.tab-pill.active {
+  background: #2563eb; /* Digital Blue */
+  border: 1px solid #2563eb;
+  color: #ffffff;
+  box-shadow: none;
+  transform: scale(1.03);
+}
+
+/* Physics container for floating bubbles */
+.bubbles-canvas-container {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  margin-bottom: 0;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Hide scrollbar for clean kiosk interface */
+  background: #ffffff; /* pure white background */
+  border-top: 1px solid #000000; /* clean black line separating headers */
+  box-shadow: none; /* flat design */
+  touch-action: none;
+  min-height: 0; /* Prevents flex item from expanding past viewport height */
+}
+
+.bubbles-canvas-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+/* Stylings for individual country bubble elements */
+.country-bubble {
+  position: absolute;
+  cursor: pointer;
+  z-index: 5;
+  will-change: transform, left, top;
+  touch-action: none;
+}
+
+.bubble-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 0px; /* flat square corners */
+  background: #ffffff;
+  border: 2px solid #000000; /* flat black border */
+  box-shadow: none;
+  backdrop-filter: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 18%;
+  transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  position: relative;
+}
+
+/* Map SVG styling */
+.country-map-svg {
+  width: 70%;
+  height: 70%;
+  margin-bottom: 10%;
+  filter: none; /* no shadows */
+  transition: transform 0.4s ease;
+}
+
+.country-map-svg path,
+.detail-country-svg path {
+  stroke: #000000 !important; /* Force black map outlines for contrast */
+}
+
+/* Country tag inside bubble */
+.bubble-label {
+  padding: 5px 12px;
+  background: #000000; /* Solid black capsule background */
+  border: none;
+  border-radius: 0px; /* square tag */
+  color: #ffffff; /* pure white text */
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  text-shadow: none;
+  text-align: center;
+  box-shadow: none;
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+/* Touch active and tapped tactile feedback (Optimized for Touch Kiosks) */
+.country-bubble.touch-active .bubble-inner {
+  transform: scale(0.96);
+  background-color: #f3f4f6; /* structural light gray */
+}
+
+.country-bubble.tapped .bubble-inner {
+  transform: scale(1.05);
+  border-color: #2563eb; /* Digital Blue highlight */
+  background-color: #ffffff;
+  box-shadow: none;
+}
+
+.country-bubble.tapped .bubble-label {
+  background: #2563eb; /* Digital Blue highlight */
+}
+
+.country-bubble.tapped .country-map-svg {
+  transform: scale(1.08);
+  transition: transform 0.15s ease;
+}
+
+/* =========================================
+   Detail Page Layout
+   ========================================= */
+
+.detail-view {
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+  color: #000000;
+}
+
+.detail-scroll-container,
+.uni-detail-scroll-container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.25) transparent;
+}
+
+.detail-scroll-container {
+  padding: 80px 24px 95px 24px; /* Space at top for floating back-btn, bottom for panels */
+}
+
+.uni-detail-scroll-container {
+  padding: 80px 24px 95px 24px; /* Space at top for floating back-btn, bottom for panels */
+  scrollbar-width: none; /* Hide scrollbar for clean UI */
+}
+
+/* Custom Scrollbar for detail view scroll container */
+.detail-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+.detail-scroll-container::-webkit-scrollbar-thumb {
+  background-color: #000000;
+  border-radius: 0px;
+}
+
+/* Back/Home button floating at top left */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+  cursor: pointer;
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 100;
+  background: #000000;
+  border: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 8px 16px;
+  border-radius: 0px; /* square */
+  transition: var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.back-btn:active {
+  background: #2563eb; /* Digital Blue when clicked */
+  transform: scale(0.95);
+}
+
+.back-btn svg {
+  fill: currentColor;
+}
+
+/* Top Detail Section (Country summary info) */
+.detail-header-section {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  gap: 16px;
+  margin-top: 15px;
+  margin-bottom: 24px;
+  align-items: start;
+}
+
+/* Tiny bubble in the detail page header */
+.header-country-bubble {
+  width: 105px;
+  height: 105px;
+  border-radius: 0px; /* square */
+  background: #ffffff;
+  border: 2px solid #000000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12%;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.header-country-bubble svg {
+  width: 75%;
+  height: 75%;
+  fill: none;
+  stroke: #000000 !important;
+  stroke-width: 3;
+}
+
+.header-country-bubble .label {
+  font-size: 7.5px;
+  font-weight: 800;
+  margin-top: 4px;
+  background: #000000;
+  color: #ffffff; /* pure white text */
+  padding: 3px 8px;
+  border-radius: 0px; /* square */
+  border: none;
+  box-shadow: none;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Main summary text box */
+.country-info-card {
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0px; /* square */
+  padding: 16px;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.country-title-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.country-name {
+  font-size: 20px;
+  font-weight: 800; /* extremely bold */
+  letter-spacing: -0.3px;
+  color: #000000;
+}
+
+.country-flag {
+  font-size: 20px;
+}
+
+.country-desc {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: #333333;
+  margin-bottom: 10px;
+}
+
+.country-desc:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Section divider header */
+.section-title {
+  font-size: 14px;
+  font-weight: 800; /* extremely bold */
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 16px;
+  color: #000000;
+  border-left: 3px solid #000000;
+  padding-left: 8px;
+}
+
+/* University list wrapper */
+.uni-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* Large space between units */
+}
+
+/* Standalone floating label for university card (Matching mockup!) */
+.uni-header-pill {
+  display: inline-flex;
+  padding: 6px 14px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0px; /* square corners */
+  color: #000000;
+  font-size: 11.5px;
+  font-weight: 800; /* extremely bold */
+  margin-bottom: 8px;
+  backdrop-filter: none;
+  max-width: 100%;
+}
+
+/* The actual Card container */
+.uni-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Card body consisting of two columns */
+.uni-card-body {
+  display: grid;
+  grid-template-columns: 1.1fr 1.2fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* Left side Carousel */
+.uni-image-carousel {
+  position: relative;
+  border-radius: 0px; /* square corners */
+  overflow: hidden;
+  height: 125px;
+  box-shadow: none; /* flat */
+  border: 1px solid #000000;
+}
+
+.carousel-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.carousel-slide-img.active {
+  display: block;
+}
+
+/* Carousel overlay arrows */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 0px; /* square button */
+  background: #000000;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: var(--transition-fast);
+}
+
+.carousel-btn:active {
+  background: #2563eb; /* Digital Blue when clicked */
+  transform: translateY(-50%) scale(0.9);
+}
+
+.carousel-btn.prev {
+  left: 8px;
+}
+
+.carousel-btn.next {
+  right: 8px;
+}
+
+.carousel-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+/* Right side content info block */
+.uni-info-block {
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0px; /* square corners */
+  padding: 12px;
+  backdrop-filter: none;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Location and students numbers headers */
+.uni-meta-row {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #000000;
+  flex-wrap: wrap;
+}
+
+.uni-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.uni-meta-item svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+.uni-card-desc {
+  font-size: 10px;
+  line-height: 1.45;
+  color: #333333;
+  margin-bottom: 10px;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Pill CTA inside card */
+.uni-more-btn {
+  align-self: flex-start;
+  padding: 8px 16px;
+  background: #000000; /* massiver, tiefschwarzer Balken */
+  border: none;
+  border-radius: 0px; /* square corners */
+  color: #ffffff; /* white text */
+  font-size: 9.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  box-shadow: none;
+  text-transform: uppercase;
+}
+
+.uni-more-btn:active {
+  background: #2563eb; /* Digital Blue when clicked */
+  transform: scale(0.95);
+}
+
+/* =========================================
+   Modal / Detail Drawer (For Uni details)
+   ========================================= */
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: none;
+  z-index: 500;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* slides up from bottom */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-sheet {
+  width: 100%;
+  max-height: 80%;
+  background: #ffffff;
+  border-radius: 0px;
+  border: 2px solid #000000;
+  border-bottom: none;
+  padding: 24px;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  color: #000000;
+}
+
+.modal-overlay.active .modal-sheet {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.modal-title-box h3 {
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #000000;
+}
+
+.modal-title-box p {
+  font-size: 12px;
+  color: #333333;
+  margin-top: 4px;
+}
+
+.modal-close-btn {
+  background: #000000;
+  border: none;
+  color: #ffffff;
+  width: 28px;
+  height: 28px;
+  border-radius: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.modal-close-btn:active {
+  background: #2563eb;
+  transform: scale(0.9);
+}
+
+.modal-close-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+
+.modal-section p {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--text-light);
+}
+
+.modal-tag-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.modal-tag {
+  background: #ffffff;
+  border: 1px solid #000000;
+  padding: 4px 10px;
+  border-radius: 0px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.qr-card-img-wrap {
+  width: 140px;
+  height: 140px;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 0px;
+  margin: 0 auto 15px auto;
+  border: 1px solid #000000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Companion scan QR Overlay */
+.qr-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: none; /* no blur */
+  z-index: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.qr-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.qr-card {
+  width: 80%;
+  max-width: 320px;
+  background: #ffffff; /* pure white background */
+  border: 2px solid #000000; /* flat black border */
+  border-radius: 0px; /* square corners */
+  padding: 24px;
+  text-align: center;
+  box-shadow: none; /* flat design */
+  color: #000000; /* black text */
+  transform: scale(0.9);
+  transition: transform 0.2s ease;
+}
+
+.qr-modal.active .qr-card {
+  transform: scale(1);
+}
+
+.qr-card-img {
+  width: 150px;
+  height: 150px;
+  background: white;
+  margin: 15px auto;
+  border-radius: 0px;
+  padding: 10px;
+  box-shadow: none;
+  border: 1px solid #000000;
+}
+
+.qr-card h4 {
+  font-size: 16px;
+  font-weight: 800; /* extremely bold */
+  color: #000000;
+  text-transform: uppercase;
+}
+
+.qr-card p {
+  font-size: 11px;
+  color: #333333;
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+.qr-card-close {
+  margin-top: 15px;
+  padding: 8px 16px;
+  background: #000000;
+  border: none;
+  color: #ffffff;
+  border-radius: 0px; /* square */
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition-fast);
+  text-transform: uppercase;
+}
+
+.qr-card-close:active {
+  background: #2563eb; /* Digital Blue */
+  transform: scale(0.95);
+}
+
+/* Companion simulated view (QR Redirect Simulator) */
+.companion-simulator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff; /* flat white background */
+  z-index: 800;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  color: #000000; /* black text */
+}
+
+.companion-simulator.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.comp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #000000; /* solid black border line */
+  padding-bottom: 12px;
+  margin-bottom: 15px;
+}
+
+.comp-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #2563eb; /* Digital Blue active title highlight */
+  text-transform: uppercase;
+}
+
+.comp-close {
+  background: #000000;
+  border: none;
+  color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 0px; /* square */
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.comp-close:active {
+  background: #2563eb; /* Digital Blue */
+}
+
+.comp-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-bottom: 20px;
+}
+
+.comp-card {
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0px;
+  padding: 15px;
+}
+
+.comp-card h4 {
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+
+.comp-card p {
+  font-size: 11px;
+  color: #333333;
+  line-height: 1.4;
+}
+
+.comp-checklist-item {
+  display: flex;
+  gap: 10px;
+  align-items: start;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+
+.comp-check {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #000000;
+  border-radius: 0px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.comp-check.checked {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+.comp-check.checked::after {
+  content: '✓';
+  font-size: 9px;
+  color: white;
+}
+
+
+
+/* Erasmus Info Banner for Europe */
+.erasmus-info-banner {
+  background: #ffffff;
+  border: 2px solid #000000;
+  border-radius: 0px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  box-shadow: none;
+}
+
+.erasmus-banner-inner {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+}
+
+/* Standby Video Overlay */
+.standby-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 900; /* overlay all views, but below control panel which is outside the screen */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.standby-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.standby-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* cover the screen aspect ratio perfectly */
+}
+
+/* Call to Action overlay on standby video */
+.standby-cta {
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #000000; /* Solid Black */
+  border: 2px solid #ffffff; /* Solid White border */
+  padding: 14px 28px;
+  border-radius: 0px; /* square corners */
+  color: #ffffff; /* white text */
+  font-size: 16px;
+  font-weight: 800; /* extremely bold */
+  text-align: center;
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: none;
+  animation: pulse 2s infinite ease-in-out;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.90; }
+  50% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+}
+
+/* University Specific Detail Screen styling */
+.uni-detail-view {
+  background: #ffffff;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  color: #000000;
+  overflow: hidden;
+  z-index: 80; /* Sits below Standby Overlay (900) but covers details list (10-20) */
+}
+
+.uni-detail-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.uni-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Decreased gap for a tidier layout */
+  margin-top: 12px;
+  flex-grow: 1;
+}
+
+/* Campus Hero Image */
+.uni-hero-wrap {
+  width: 100%;
+  height: 120px; /* Reduced height of the hero banner image */
+  border-radius: 0px; /* square corners */
+  overflow: hidden;
+  box-shadow: none;
+  border: 1px solid #000000;
+  flex-shrink: 0;
+  background: #ffffff;
+}
+
+.uni-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.uni-hero-wrap:hover .uni-hero-img {
+  transform: scale(1.03);
+}
+
+/* University Name Capsule */
+.uni-name-pill {
+  align-self: center;
+  background: #000000; /* Solid Black background */
+  color: #ffffff;      /* White text */
+  padding: 8px 20px;
+  border-radius: 0px;  /* square */
+  font-family: var(--primary-font);
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: none;
+  border: none;
+  max-width: 95%; /* Allow full width utilization */
+  line-height: 1.35;
+  flex-shrink: 0;
+}
+
+/* Content Grid Layout */
+.uni-detail-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 12px; /* Tighter gap */
+  flex-grow: 1;
+  min-height: 300px;
+  align-items: stretch;
+}
+
+/* Left Column Testimonial Card */
+.uni-testimonial-card {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0px;
+  overflow: hidden;
+  box-shadow: none;
+  backdrop-filter: none;
+  display: flex;
+  flex-direction: column;
+}
+
+.uni-testimonial-carousel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.uni-testimonial-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Left and Right navigation arrows inside testimonial card */
+.uni-testimonial-carousel .carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  background: #000000;
+  border: 1px solid #ffffff;
+  border-radius: 0px; /* square */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.2s ease;
+  backdrop-filter: none;
+}
+
+.uni-testimonial-carousel .carousel-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.uni-testimonial-carousel .carousel-btn:hover {
+  background: #2563eb; /* Digital Blue when clicked/hovered */
+  border-color: #2563eb;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.uni-testimonial-carousel .carousel-btn.prev {
+  left: 12px;
+}
+
+.uni-testimonial-carousel .carousel-btn.next {
+  right: 12px;
+}
+
+/* Testimonial Quote Overlay at the bottom of the card */
+.uni-testimonial-quote-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.9); /* Solid flat black overlay */
+  padding: 12px;
+  z-index: 2;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none; /* Click arrows behind */
+  border-top: 1px solid #000000;
+}
+
+#uniTestimonialQuote {
+  font-family: var(--primary-font);
+  font-size: 10.5px;
+  line-height: 1.45;
+  font-style: italic;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.95);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#uniTestimonialAuthor {
+  font-family: var(--primary-font);
+  font-size: 9px;
+  font-weight: 700;
+  color: #2563eb; /* Accent digital blue */
+}
+
+/* Right Column: Stacked Glass Cards */
+.uni-right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Decreased gap between stacked cards */
+}
+
+.uni-info-glass-card {
+  flex: 1;
+  background: #ffffff;
+  border: 1px solid #000000;
+  border-radius: 0px; /* square corners */
+  padding: 12px 14px;
+  box-shadow: none;
+  backdrop-filter: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+  color: #000000;
+}
+
+.uni-info-glass-card h5 {
+  font-family: var(--primary-font);
+  font-size: 11px; /* Tighter title */
+  font-weight: 800; /* extremely bold */
+  margin: 0 0 8px 0;
+  color: #000000; /* deep black */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1.5px solid #000000; /* solid black divider line */
+  padding-bottom: 4px;
+}
+
+/* Courses List */
+.uni-course-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.uni-course-list li {
+  font-family: var(--primary-font);
+  font-size: 9.5px; /* Tighter font sizes */
+  color: #333333;
+  padding-left: 20px; /* more padding for custom checkbox spacing */
+  position: relative;
+  line-height: 1.35;
+}
+
+.uni-course-list li::before {
+  content: "✓"; /* square checked checkbox */
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 11px;
+  height: 11px;
+  background: #2563eb; /* Digital Blue */
+  color: #ffffff; /* white checkmark */
+  font-size: 8px;
+  font-weight: 900;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 1;
+  border: 1px solid #2563eb;
+}
+
+/* Dates List */
+.uni-dates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.uni-date-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--primary-font);
+  font-size: 9.5px; /* Tighter font sizes */
+  border-bottom: 1px solid #e5e7eb; /* clean thin divider line */
+  padding-bottom: 4px;
+}
+
+.uni-date-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.uni-date-label {
+  color: #555555;
+  font-weight: 600;
+}
+
+.uni-date-val {
+  font-weight: 700;
+  color: #000000;
+  background: #f3f4f6; /* structural light gray */
+  border: 1px solid #000000; /* thin black border */
+  padding: 2px 6px;
+  border-radius: 0px; /* square corners */
+  font-size: 9px;
+}
+
+

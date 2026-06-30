@@ -1,0 +1,1422 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables for design system tokens */
+:root {
+  --primary-font: 'Inter', sans-serif;
+  --bg-gradient: linear-gradient(180deg, #3d8b7a 0%, #4e7e93 50%, #c5af7b 100%);
+  --tab-gradient: linear-gradient(135deg, rgba(61, 139, 122, 0.95) 0%, rgba(78, 126, 147, 0.95) 100%);
+  
+  --glass-bg: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.35);
+  --glass-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+  --glass-blur: blur(12px);
+  
+  --text-white: #ffffff;
+  --text-light: rgba(255, 255, 255, 0.85);
+  --text-dark: #222222;
+  --text-muted: #666666;
+  
+  --transition-smooth: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition-fast: all 0.2s ease;
+  
+  --kiosk-w: 430px;
+  --kiosk-h: 760px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--primary-font);
+  background-color: #1a1e22;
+  color: var(--text-white);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Control Panel for simulated bezel and simulation settings */
+.control-panel {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+  z-index: 1000;
+  display: flex;
+  gap: 10px;
+}
+
+.btn-ctrl {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text-white);
+  padding: 8px 16px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  backdrop-filter: blur(5px);
+  transition: var(--transition-fast);
+}
+
+.btn-ctrl:active {
+  background: rgba(255, 255, 255, 0.25);
+  transform: translateY(1px);
+}
+
+/* Kiosk Bezel Wrapper Simulator - Optimized for large responsive mockup view */
+:root {
+  /* Kiosk container height stretches to fill 86% of viewport height */
+  --kiosk-h: 86vh;
+  /* Kiosk container width calculated so that screen has EXACT 9:16 aspect ratio (116px account for top padding & bottom stand) */
+  --kiosk-w: calc((var(--kiosk-h) - 116px) * 9 / 16 + 32px);
+}
+
+.kiosk-container {
+  position: relative;
+  width: var(--kiosk-w);
+  height: var(--kiosk-h);
+  background: #25282c;
+  border-radius: 32px;
+  padding: 16px 16px 0px 16px; /* Room for screen, leave space at bottom for logo panel */
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 
+              inset 0 4px 10px rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  border: 4px solid #3c4046;
+  overflow: hidden;
+  transition: width 0.6s ease, height 0.6s ease, border-radius 0.6s ease, padding 0.6s ease;
+}
+
+/* Fullscreen mode toggle classes (behaves as screen-only when toggled fullscreen) */
+.kiosk-container.fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* The screen contents */
+.kiosk-screen {
+  position: relative;
+  flex: 1;
+  background: var(--bg-gradient);
+  border-radius: 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  user-select: none;
+}
+
+.kiosk-container.fullscreen .kiosk-screen {
+  border-radius: 0;
+}
+
+/* Physical Stand Panel at the bottom of the device simulator */
+.kiosk-bottom-panel {
+  height: 100px;
+  background: #e2e4e8;
+  margin: 16px -16px -16px -16px; /* pull down to outer bezel edge */
+  display: flex;
+  flex-direction: row; /* Row layout to place QR code next to logo */
+  justify-content: space-between; /* Space them out nicely */
+  align-items: center;
+  border-top: 3px solid #b2b6bd;
+  padding: 12px 24px;
+  box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+  z-index: 10;
+}
+
+.kiosk-container.fullscreen .kiosk-bottom-panel {
+  display: none; /* Hide in fullscreen */
+}
+
+/* Logo and text inside bottom panel */
+/* Logo container and official SVG logo styling */
+.logo-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 320px;
+  user-select: none;
+}
+
+.thi-logo-svg {
+  height: 42px; /* perfectly sized to match the bottom bezel height */
+  width: auto;
+  object-fit: contain;
+}
+
+/* QR Code module inside the bottom panel bezel - clean, borderless transparent */
+.qr-code-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+  user-select: none;
+}
+
+.qr-code-box:hover {
+  transform: scale(1.04);
+}
+
+.bottom-qr-inner {
+  width: 48px;
+  height: 48px;
+  background: #ffffff;
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 2px; /* slight white margin for scanning reliability */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.bottom-qr-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bottom-qr-text-wrap {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  text-align: left;
+}
+
+.bottom-qr-subtitle {
+  font-family: var(--primary-font);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #002c5c;
+  white-space: nowrap;
+}
+
+/* Home view layout */
+.screen-view {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.home-header-wrap {
+  padding: 24px 24px 0 24px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  z-index: 15;
+}
+
+.screen-view.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(0, 0);
+}
+
+/* Out of view transition positions */
+.screen-view.slide-left {
+  transform: translate(-100px, 0);
+  opacity: 0;
+}
+
+.screen-view.slide-right {
+  transform: translate(100px, 0);
+  opacity: 0;
+}
+
+/* Main title header */
+.main-title {
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 15px;
+  margin-bottom: 20px;
+  color: var(--text-white);
+  line-height: 1.3;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.15);
+}
+
+/* Navigation tab pills */
+.tabs-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+  overflow-x: auto;
+  padding: 4px 2px 12px 2px;
+  scrollbar-width: none; /* Hide standard Firefox scrollbars */
+  z-index: 10;
+  scroll-behavior: smooth;
+  touch-action: pan-x;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+  cursor: grab;
+}
+
+.tabs-container:active {
+  cursor: grabbing;
+}
+
+.tabs-container::-webkit-scrollbar {
+  display: none; /* Hide standard Chrome scrollbars */
+}
+
+.tab-pill {
+  flex-shrink: 0;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  color: var(--text-white);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  backdrop-filter: blur(5px);
+}
+
+.tab-pill:active {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(0.95);
+}
+
+.tab-pill.active {
+  background: var(--tab-gradient);
+  border: 1.5px solid var(--text-white);
+  box-shadow: 0 4px 15px rgba(61, 139, 122, 0.35);
+  transform: scale(1.03);
+}
+
+/* Physics container for floating bubbles */
+.bubbles-canvas-container {
+  flex: 1;
+  position: relative;
+  width: 100%;
+  margin-bottom: 0;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Hide scrollbar for clean kiosk interface */
+  background: rgba(255, 255, 255, 0.05); /* visual "box" containing bubbles */
+  border-top: 1px solid rgba(255, 255, 255, 0.15); /* top edge meets tabs */
+  box-shadow: inset 0 8px 24px rgba(0, 0, 0, 0.18); /* gives depth and a volumetric feel */
+  touch-action: none;
+  min-height: 0; /* Prevents flex item from expanding past viewport height */
+}
+
+.bubbles-canvas-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+/* Stylings for individual country bubble elements */
+.country-bubble {
+  position: absolute;
+  cursor: pointer;
+  z-index: 5;
+  will-change: transform, left, top;
+  touch-action: none;
+}
+
+.bubble-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  border: 1.5px solid var(--glass-border);
+  box-shadow: var(--glass-glow);
+  backdrop-filter: var(--glass-blur);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 18%;
+  transition: transform 0.25s cubic-bezier(0.25, 0.8, 0.25, 1), border-color 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+  position: relative;
+}
+
+/* Map SVG styling */
+.country-map-svg {
+  width: 70%;
+  height: 70%;
+  margin-bottom: 10%;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.2));
+  transition: transform 0.4s ease;
+}
+
+/* Country tag inside bubble */
+.bubble-label {
+  padding: 4.5px 12px;
+  background: rgba(0, 44, 92, 0.85); /* High-contrast Dark THI Blue */
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #ffffff; /* pure white text */
+  font-size: 10px; /* slightly larger for readability */
+  font-weight: 750;
+  letter-spacing: 0.3px;
+  text-shadow: none;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+/* Touch active and tapped tactile feedback (Optimized for Touch Kiosks) */
+.country-bubble.touch-active .bubble-inner {
+  transform: scale(0.96);
+  border-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.country-bubble.tapped .bubble-inner {
+  transform: scale(1.08);
+  border-color: rgba(255, 255, 255, 0.95);
+  background-color: rgba(255, 255, 255, 0.28);
+  box-shadow: 0 12px 40px rgba(255, 255, 255, 0.4);
+  transition: transform 0.15s cubic-bezier(0.25, 1, 0.5, 1), border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.country-bubble.tapped .country-map-svg {
+  transform: scale(1.1);
+  transition: transform 0.15s ease;
+}
+
+/* =========================================
+   Detail Page Layout
+   ========================================= */
+
+.detail-view {
+  background: var(--bg-gradient);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0;
+}
+
+.detail-scroll-container,
+.uni-detail-scroll-container {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+.detail-scroll-container {
+  padding: 80px 24px 95px 24px; /* Space at top for floating back-btn, bottom for panels */
+}
+
+.uni-detail-scroll-container {
+  padding: 80px 24px 95px 24px; /* Space at top for floating back-btn, bottom for panels */
+  scrollbar-width: none; /* Hide scrollbar for clean UI */
+}
+
+/* Custom Scrollbar for detail view scroll container */
+.detail-scroll-container::-webkit-scrollbar {
+  width: 6px;
+}
+.detail-scroll-container::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+}
+
+/* Back/Home button floating at top left */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  z-index: 100;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+  padding: 10px 18px;
+  border-radius: 20px;
+  transition: var(--transition-smooth);
+}
+
+.back-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: scale(0.95);
+}
+
+.back-btn svg {
+  fill: currentColor;
+}
+
+/* Top Detail Section (Country summary info) */
+.detail-header-section {
+  display: grid;
+  grid-template-columns: 105px 1fr;
+  gap: 16px;
+  margin-top: 15px;
+  margin-bottom: 24px;
+  align-items: start;
+}
+
+/* Tiny bubble in the detail page header */
+.header-country-bubble {
+  width: 105px;
+  height: 105px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12%;
+  box-shadow: var(--glass-glow);
+  backdrop-filter: var(--glass-blur);
+}
+
+.header-country-bubble svg {
+  width: 75%;
+  height: 75%;
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.95);
+  stroke-width: 3;
+}
+
+.header-country-bubble .label {
+  font-size: 7.5px;
+  font-weight: 800;
+  margin-top: 4px;
+  background: rgba(0, 44, 92, 0.85); /* High-contrast Dark THI Blue */
+  color: #ffffff; /* pure white text */
+  padding: 2.5px 8px;
+  border-radius: 8px;
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.12);
+  text-align: center;
+}
+
+/* Main summary text box */
+.country-info-card {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.country-title-box {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.country-name {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.country-flag {
+  font-size: 20px;
+}
+
+.country-desc {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--text-light);
+  margin-bottom: 10px;
+}
+
+.country-desc:last-of-type {
+  margin-bottom: 0;
+}
+
+/* Section divider header */
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  margin-bottom: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  border-left: 3px solid #ffffff;
+  padding-left: 8px;
+}
+
+/* University list wrapper */
+.uni-list-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px; /* Large space between units */
+}
+
+/* Clean bold heading for the university card name */
+.uni-card-title {
+  font-size: 16.5px;
+  font-weight: 700;
+  color: var(--text-white);
+  margin: 0 0 6px 0;
+  padding: 0;
+  letter-spacing: 0.3px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* The actual Card container */
+.uni-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+/* Card body consisting of two columns */
+.uni-card-body {
+  display: grid;
+  grid-template-columns: 1.1fr 1.2fr;
+  gap: 12px;
+  align-items: stretch;
+}
+
+/* Left side Carousel */
+.uni-image-carousel {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  height: 125px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.2);
+}
+
+.carousel-slide-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.carousel-slide-img.active {
+  display: block;
+}
+
+/* Carousel overlay arrows */
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: var(--text-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 3;
+  transition: var(--transition-fast);
+}
+
+.carousel-btn:active {
+  background: rgba(0, 0, 0, 0.8);
+  transform: translateY(-50%) scale(0.9);
+}
+
+.carousel-btn.prev {
+  left: 8px;
+}
+
+.carousel-btn.next {
+  right: 8px;
+}
+
+.carousel-btn svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+/* Right side content info block */
+.uni-info-block {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 18px;
+  padding: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Location and students numbers headers */
+.uni-meta-row {
+  display: flex;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-white);
+  flex-wrap: wrap;
+}
+
+.uni-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.uni-meta-item svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+}
+
+.uni-card-desc {
+  font-size: 10px;
+  line-height: 1.45;
+  color: var(--text-light);
+  margin-bottom: 10px;
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Pill CTA inside card */
+.uni-more-btn {
+  align-self: flex-start;
+  padding: 5px 12px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  color: var(--text-white);
+  font-size: 9.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-smooth);
+  box-shadow: inset 0 1px 2px rgba(255,255,255,0.1);
+}
+
+.uni-more-btn:active {
+  background: rgba(255, 255, 255, 0.25);
+  transform: scale(0.95);
+}
+
+/* =========================================
+   Modal / Detail Drawer (For Uni details)
+   ========================================= */
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 500;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* slides up from bottom */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+.modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-sheet {
+  width: 100%;
+  max-height: 80%;
+  background: #234c56;
+  border-radius: 24px 24px 0 0;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-bottom: none;
+  padding: 24px;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  transform: translateY(100%);
+  transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+  color: var(--text-white);
+}
+
+.modal-overlay.active .modal-sheet {
+  transform: translateY(0);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.modal-title-box h3 {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.modal-title-box p {
+  font-size: 12px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: var(--text-white);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.modal-close-btn:active {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(0.9);
+}
+
+.modal-close-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: currentColor;
+}
+
+.modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 20px;
+}
+
+.modal-section {
+  margin-bottom: 20px;
+}
+
+.modal-section-title {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-light);
+  margin-bottom: 8px;
+}
+
+.modal-section p {
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--text-light);
+}
+
+.modal-tag-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.modal-tag {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* Companion scan QR Overlay */
+.qr-modal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  z-index: 600;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.qr-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.qr-card {
+  width: 80%;
+  max-width: 320px;
+  background: #1c3d44;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  color: var(--text-white);
+  transform: scale(0.9);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.qr-modal.active .qr-card {
+  transform: scale(1);
+}
+
+.qr-card-img {
+  width: 150px;
+  height: 150px;
+  background: white;
+  margin: 15px auto;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.qr-card h4 {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.qr-card p {
+  font-size: 11px;
+  color: var(--text-light);
+  line-height: 1.4;
+  margin-top: 8px;
+}
+
+.qr-card-close {
+  margin-top: 15px;
+  padding: 6px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  color: var(--text-white);
+  border-radius: 15px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+
+.qr-card-close:active {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(0.95);
+}
+
+/* Companion simulated view (QR Redirect Simulator) */
+.companion-simulator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #0f1519;
+  z-index: 800;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  color: var(--text-white);
+}
+
+.companion-simulator.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.comp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  padding-bottom: 12px;
+  margin-bottom: 15px;
+}
+
+.comp-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #3d8b7a;
+}
+
+.comp-close {
+  background: rgba(255,255,255,0.1);
+  border: none;
+  color: var(--text-white);
+  padding: 4px 10px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.comp-content {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding-bottom: 20px;
+}
+
+.comp-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 15px;
+}
+
+.comp-card h4 {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.comp-card p {
+  font-size: 11px;
+  color: var(--text-light);
+  line-height: 1.4;
+}
+
+.comp-checklist-item {
+  display: flex;
+  gap: 10px;
+  align-items: start;
+  margin-bottom: 8px;
+  font-size: 11px;
+}
+
+.comp-check {
+  width: 14px;
+  height: 14px;
+  border: 1px solid #3d8b7a;
+  border-radius: 3px;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.comp-check.checked {
+  background: #3d8b7a;
+  border-color: #3d8b7a;
+}
+
+.comp-check.checked::after {
+  content: '✓';
+  font-size: 9px;
+  color: white;
+}
+
+
+
+/* Erasmus Info Banner for Europe */
+.erasmus-info-banner {
+  background: rgba(80, 227, 194, 0.12);
+  border: 1px solid rgba(80, 227, 194, 0.35);
+  border-radius: 18px;
+  padding: 14px 16px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.erasmus-banner-inner {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+}
+
+/* Standby Video Overlay */
+.standby-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  z-index: 900; /* overlay all views, but below control panel which is outside the screen */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.standby-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.standby-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* cover the screen aspect ratio perfectly */
+}
+
+/* Call to Action overlay on standby video */
+.standby-cta {
+  position: absolute;
+  bottom: 3%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 44, 92, 0.85); /* THI Blue with transparency */
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  padding: 14px 28px;
+  border-radius: 30px;
+  color: var(--text-white);
+  font-size: 16px;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.2);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+  animation: pulse 2s infinite ease-in-out;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.90; }
+  50% { transform: translateX(-50%) scale(1.05); opacity: 1; }
+}
+
+/* University Specific Detail Screen styling */
+.uni-detail-view {
+  background: var(--bg-gradient);
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  color: var(--text-white);
+  overflow: hidden;
+  z-index: 80; /* Sits below Standby Overlay (900) but covers details list (10-20) */
+}
+
+.uni-detail-scroll-container::-webkit-scrollbar {
+  display: none;
+}
+
+.uni-detail-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Decreased gap for a tidier layout */
+  margin-top: 12px;
+  flex-grow: 1;
+}
+
+/* Campus Hero Image */
+.uni-hero-wrap {
+  width: 100%;
+  height: 120px; /* Reduced height of the hero banner image */
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+  background: #1a1c1e;
+}
+
+.uni-hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.uni-hero-wrap:hover .uni-hero-img {
+  transform: scale(1.03);
+}
+
+/* University Name Capsule */
+.uni-name-pill {
+  align-self: center;
+  background: rgba(255, 255, 255, 0.85); /* Premium opaque white */
+  color: #002c5c; /* Dark THI Blue */
+  padding: 6px 18px; /* Tighter padding */
+  border-radius: 24px;
+  font-family: var(--primary-font);
+  font-size: 12px; /* Slightly more compact */
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), inset 0 1px 1px rgba(255,255,255,0.4);
+  border: 1px solid #ffffff;
+  letter-spacing: 0.3px;
+  max-width: 95%; /* Allow full width utilization */
+  line-height: 1.35;
+  flex-shrink: 0;
+  /* Removed white-space: nowrap, overflow: hidden, and text-overflow to display name completely */
+}
+
+/* Content Grid Layout */
+.uni-detail-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 12px; /* Tighter gap */
+  flex-grow: 1;
+  min-height: 300px;
+  align-items: stretch;
+}
+
+/* Left Column Testimonial Card */
+.uni-testimonial-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: var(--glass-blur);
+  display: flex;
+  flex-direction: column;
+}
+
+.uni-testimonial-carousel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.uni-testimonial-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Left and Right navigation arrows inside testimonial card */
+.uni-testimonial-carousel .carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  cursor: pointer;
+  z-index: 5;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.uni-testimonial-carousel .carousel-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+.uni-testimonial-carousel .carousel-btn:hover {
+  background: rgba(0, 0, 0, 0.6);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.uni-testimonial-carousel .carousel-btn.prev {
+  left: 12px;
+}
+
+.uni-testimonial-carousel .carousel-btn.next {
+  right: 12px;
+}
+
+/* Testimonial Quote Overlay at the bottom of the card */
+.uni-testimonial-quote-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(to top, rgba(0, 44, 92, 0.95) 0%, rgba(0, 44, 92, 0.7) 75%, transparent 100%);
+  padding: 18px 12px 12px 12px; /* Tighter padding overlay */
+  z-index: 2;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  pointer-events: none; /* Click arrows behind */
+}
+
+#uniTestimonialQuote {
+  font-family: var(--primary-font);
+  font-size: 10.5px;
+  line-height: 1.45;
+  font-style: italic;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.95);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#uniTestimonialAuthor {
+  font-family: var(--primary-font);
+  font-size: 9px;
+  font-weight: 700;
+  color: #50e3c2; /* Accent color matches testimonial quote author */
+}
+
+/* Right Column: Stacked Glass Cards */
+.uni-right-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px; /* Decreased gap between stacked cards */
+}
+
+.uni-info-glass-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px; /* Slightly tighter rounded corners */
+  padding: 12px 14px; /* Tighter padding for tidy appearance */
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  backdrop-filter: var(--glass-blur);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.uni-info-glass-card h5 {
+  font-family: var(--primary-font);
+  font-size: 11px; /* Tighter title */
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #50e3c2; /* Accent color */
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1.5px solid rgba(80, 227, 194, 0.2);
+  padding-bottom: 4px;
+}
+
+/* Courses List */
+.uni-course-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.uni-course-list li {
+  font-family: var(--primary-font);
+  font-size: 9.5px; /* Tighter font sizes */
+  color: rgba(255, 255, 255, 0.9);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.35;
+}
+
+.uni-course-list li::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  color: #50e3c2;
+  font-size: 9px;
+}
+
+/* Dates List */
+.uni-dates-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.uni-date-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--primary-font);
+  font-size: 9.5px; /* Tighter font sizes */
+  border-bottom: 1px dashed rgba(255,255,255,0.1);
+  padding-bottom: 4px;
+}
+
+.uni-date-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.uni-date-label {
+  color: rgba(255, 255, 255, 0.7);
+  font-weight: 500;
+}
+
+.uni-date-val {
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(255,255,255,0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+}
+
+
